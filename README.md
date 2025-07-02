@@ -30,16 +30,16 @@ You can use pre-built Docker images from multiple registries:
 **GitHub Container Registry (Recommended):**
 ```bash
 # Run speedtest
-$ docker run --rm ghcr.io/bariiss/speedtest-go:latest
+$ docker run --rm -ti ghcr.io/bariiss/speedtest-go:latest
 
 # List available servers
-$ docker run --rm ghcr.io/bariiss/speedtest-go:latest --list
+$ docker run --rm -ti ghcr.io/bariiss/speedtest-go:latest --list
 
 # Test with specific server
-$ docker run --rm ghcr.io/bariiss/speedtest-go:latest --server 12345
+$ docker run --rm -ti ghcr.io/bariiss/speedtest-go:latest --server 12345
 
 # Output in JSON format
-$ docker run --rm ghcr.io/bariiss/speedtest-go:latest --json
+$ docker run --rm -ti ghcr.io/bariiss/speedtest-go:latest --json
 ```
 
 **Docker Hub:**
@@ -52,7 +52,7 @@ $ docker run --rm bariiss/speedtest-go:latest
 $ git clone https://github.com/bariiss/speedtest-go.git
 $ cd speedtest-go
 $ docker build -t speedtest-go .
-$ docker run --rm speedtest-go
+$ docker run --rm -ti speedtest-go
 ```
 
 #### Other Platforms (Linux, Windows, etc.)
