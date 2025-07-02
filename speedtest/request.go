@@ -182,7 +182,9 @@ func downloadRequest(ctx context.Context, s *Server, w int) error {
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			// Log error but don't fail the operation
+			dbg.Printf("Error closing response body: %v\n", err)
+		} else {
+			dbg.Println("Response body closed successfully.")
 		}
 	}()
 	return s.Context.NewChunk().DownloadHandler(resp.Body)

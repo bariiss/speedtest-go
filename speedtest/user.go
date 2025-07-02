@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -46,7 +47,12 @@ func (s *Speedtest) FetchUserInfoContext(ctx context.Context) (*User, error) {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			dbg.Printf("Error closing response body: %v\n", err)
+		}
+	}(resp.Body)
 
 	// Decode xml
 	decoder := xml.NewDecoder(resp.Body)
