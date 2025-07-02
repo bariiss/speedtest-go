@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"net/url"
@@ -178,7 +179,7 @@ func (s *Speedtest) FetchServerByIDContext(ctx context.Context, serverID string)
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			// Log error but don't fail the operation
+			dbg.Printf("Error closing response body: %v\n", err)
 		}
 	}()
 	var list ServerList
@@ -257,7 +258,12 @@ func (s *Speedtest) FetchServerListContext(ctx context.Context) (Servers, error)
 		_payloadType = typeXMLPayload
 	}
 
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			dbg.Printf("Error closing response body: %v\n", err)
+		}
+	}(resp.Body)
 
 	var servers Servers
 

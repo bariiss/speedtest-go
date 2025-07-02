@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/bariiss/speedtest-go/speedtest/internal"
 	"io"
 	"math"
 	"runtime"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/bariiss/speedtest-go/speedtest/internal"
 )
 
 type Manager interface {

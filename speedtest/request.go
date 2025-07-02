@@ -206,7 +206,7 @@ func uploadRequest(ctx context.Context, s *Server, w int) error {
 	_, _ = io.Copy(io.Discard, resp.Body)
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			// Log error but don't fail the operation
+			dbg.Printf("Error closing response body: %v\n", err)
 		}
 	}()
 	return err
@@ -381,7 +381,9 @@ func (s *Server) ICMPPing(
 	}
 	defer func() {
 		if err := dialContext.Close(); err != nil {
-			// Log error but don't fail the operation
+			dbg.Printf("Error closing ICMP connection: %v\n", err)
+		} else {
+			dbg.Println("ICMP connection closed successfully.")
 		}
 	}()
 
