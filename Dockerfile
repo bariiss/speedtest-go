@@ -1,6 +1,9 @@
 # Build stage
-FROM golang:1.24-alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS builder
 
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG TARGETOS
 ARG TARGETARCH
 
 # Install build dependencies
@@ -19,7 +22,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build \
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
     -ldflags='-w -s -extldflags "-static"' \
     -a -installsuffix cgo \
     -o speedtest-go *.go

@@ -23,6 +23,38 @@ $ brew upgrade speedtest
 $ nix-shell -p speedtest-go
 ```
 
+#### Docker
+
+You can use pre-built Docker images from multiple registries:
+
+**GitHub Container Registry (Recommended):**
+```bash
+# Run speedtest
+$ docker run --rm ghcr.io/bariiss/speedtest-go:latest
+
+# List available servers
+$ docker run --rm ghcr.io/bariiss/speedtest-go:latest --list
+
+# Test with specific server
+$ docker run --rm ghcr.io/bariiss/speedtest-go:latest --server 12345
+
+# Output in JSON format
+$ docker run --rm ghcr.io/bariiss/speedtest-go:latest --json
+```
+
+**Docker Hub:**
+```bash
+$ docker run --rm bariiss/speedtest-go:latest
+```
+
+**Build locally:**
+```bash
+$ git clone https://github.com/bariiss/speedtest-go.git
+$ cd speedtest-go
+$ docker build -t speedtest-go .
+$ docker run --rm speedtest-go
+```
+
 #### Other Platforms (Linux, Windows, etc.)
 
 Please download the compatible package from [Releases](https://github.com/bariiss/speedtest-go/releases).

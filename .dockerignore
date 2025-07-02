@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+docs/
+
+# Development files
+.vscode/
+.idea/
+
+# Binaries
+speedtest-go
+speedtest
+
+# Test files
+*_test.go
+
+# CI/CD
+.github/
+
+# Examples
+example/
+
+# License
+LICENSE
