@@ -25,7 +25,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \
     -ldflags='-w -s -extldflags "-static"' \
     -a -installsuffix cgo \
-    -o speedtest-go *.go
+    -o speedtest-go .
 
 # Final stage
 FROM scratch
