@@ -69,7 +69,7 @@ func TestUploadTestContext(t *testing.T) {
 	}
 }
 
-func mockRequest(ctx context.Context, s *Server, w int) error {
+func mockRequest(_ context.Context, s *Server, w int) error {
 	_ = fmt.Sprintln(w) // Use the result to satisfy linter
 	dc := s.Context.NewChunk()
 	// (0.1MegaByte * 8bit * nConn * 10loop) / 0.1s = n*80Megabit

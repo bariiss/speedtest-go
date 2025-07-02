@@ -29,11 +29,6 @@ func (s *Speedtest) FetchUserInfo() (*User, error) {
 	return s.FetchUserInfoContext(context.Background())
 }
 
-// FetchUserInfo returns information about caller determined by speedtest.net
-func FetchUserInfo() (*User, error) {
-	return defaultClient.FetchUserInfo()
-}
-
 // FetchUserInfoContext returns information about caller determined by speedtest.net, observing the given context.
 func (s *Speedtest) FetchUserInfoContext(ctx context.Context) (*User, error) {
 	dbg.Printf("Retrieving user info: %s\n", speedTestConfigUrl)
@@ -68,11 +63,6 @@ func (s *Speedtest) FetchUserInfoContext(ctx context.Context) (*User, error) {
 
 	s.User = &users.Users[0]
 	return s.User, nil
-}
-
-// FetchUserInfoContext returns information about caller determined by speedtest.net, observing the given context.
-func FetchUserInfoContext(ctx context.Context) (*User, error) {
-	return defaultClient.FetchUserInfoContext(ctx)
 }
 
 // String representation of User

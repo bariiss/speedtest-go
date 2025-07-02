@@ -20,16 +20,8 @@ import (
 )
 
 const (
-	speedTestServersUrl            = "https://www.speedtest.net/api/js/servers"
-	speedTestServersAlternativeUrl = "https://www.speedtest.net/speedtest-servers-static.php"
-	speedTestServersAdvanced       = "https://www.speedtest.net/api/ios-config.php"
-)
-
-type payloadType int
-
-const (
-	typeJSONPayload payloadType = iota
-	typeXMLPayload
+	speedTestServersUrl      = "https://www.speedtest.net/api/js/servers"
+	speedTestServersAdvanced = "https://www.speedtest.net/api/ios-config.php"
 )
 
 var (
@@ -240,24 +232,6 @@ func (s *Speedtest) FetchServerListContext(ctx context.Context) (Servers, error)
 		return Servers{}, err
 	}
 
-	_payloadType := typeJSONPayload
-
-	if resp.ContentLength == 0 {
-		_ = resp.Body.Close()
-
-		req, err = http.NewRequestWithContext(ctx, http.MethodGet, speedTestServersAlternativeUrl, nil)
-		if err != nil {
-			return Servers{}, err
-		}
-
-		resp, err = s.doer.Do(req)
-		if err != nil {
-			return Servers{}, err
-		}
-
-		_payloadType = typeXMLPayload
-	}
-
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
@@ -266,27 +240,25 @@ func (s *Speedtest) FetchServerListContext(ctx context.Context) (Servers, error)
 	}(resp.Body)
 
 	var servers Servers
+	ct := resp.Header.Get("Content-Type")
 
-	switch _payloadType {
-	case typeJSONPayload:
-		// Decode xml
-		decoder := json.NewDecoder(resp.Body)
-
-		if err = decoder.Decode(&servers); err != nil {
+	switch {
+	case strings.Contains(ct, "application/json"):
+		// JSON
+		if err = json.NewDecoder(resp.Body).Decode(&servers); err != nil {
 			return servers, err
 		}
-	case typeXMLPayload:
+
+	case strings.Contains(ct, "xml"):
+		// XML
 		var list ServerList
-		// Decode xml
-		decoder := xml.NewDecoder(resp.Body)
-
-		if err = decoder.Decode(&list); err != nil {
+		if err = xml.NewDecoder(resp.Body).Decode(&list); err != nil {
 			return servers, err
 		}
-
 		servers = list.Servers
+
 	default:
-		return servers, errors.New("response payload decoding not implemented")
+		return servers, fmt.Errorf("unexpected Content-Type %q", ct)
 	}
 
 	dbg.Printf("Servers Num: %d\n", len(servers))
@@ -344,11 +316,6 @@ func (s *Speedtest) FetchServerListContext(ctx context.Context) (Servers, error)
 		return servers, ErrServerNotFound
 	}
 	return servers, nil
-}
-
-// FetchServerListContext retrieves a list of available servers, observing the given context.
-func FetchServerListContext(ctx context.Context) (Servers, error) {
-	return defaultClient.FetchServerListContext(ctx)
 }
 
 func distance(lat1 float64, lon1 float64, lat2 float64, lon2 float64) float64 {
