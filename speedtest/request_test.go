@@ -70,7 +70,7 @@ func TestUploadTestContext(t *testing.T) {
 }
 
 func mockRequest(ctx context.Context, s *Server, w int) error {
-	fmt.Sprintln(w)
+	_ = fmt.Sprintln(w) // Use the result to satisfy linter
 	dc := s.Context.Manager.NewChunk()
 	// (0.1MegaByte * 8bit * nConn * 10loop) / 0.1s = n*80Megabit
 	// sleep has bad deviation on windows

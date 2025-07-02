@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/bariiss/speedtest-go/speedtest/transport"
 	"io"
 	"math"
 	"net/http"
@@ -13,6 +12,8 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
+
+	"github.com/bariiss/speedtest-go/speedtest/transport"
 )
 
 type (
@@ -179,7 +180,11 @@ func downloadRequest(ctx context.Context, s *Server, w int) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			// Log error but don't fail the operation
+		}
+	}()
 	return s.Context.NewChunk().DownloadHandler(resp.Body)
 }
 
@@ -199,7 +204,11 @@ func uploadRequest(ctx context.Context, s *Server, w int) error {
 		return err
 	}
 	_, _ = io.Copy(io.Discard, resp.Body)
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			// Log error but don't fail the operation
+		}
+	}()
 	return err
 }
 
@@ -212,11 +221,12 @@ func (s *Server) PingTest(callback func(latency time.Duration)) error {
 func (s *Server) PingTestContext(ctx context.Context, callback func(latency time.Duration)) (err error) {
 	start := time.Now()
 	var vectorPingResult []int64
-	if s.Context.config.PingMode == TCP {
+	switch s.Context.config.PingMode {
+	case TCP:
 		vectorPingResult, err = s.TCPPing(ctx, 10, time.Millisecond*200, callback)
-	} else if s.Context.config.PingMode == ICMP {
+	case ICMP:
 		vectorPingResult, err = s.ICMPPing(ctx, time.Second*4, 10, time.Millisecond*200, callback)
-	} else {
+	default:
 		vectorPingResult, err = s.HTTPPing(ctx, 10, time.Millisecond*200, callback)
 	}
 	if err != nil || len(vectorPingResult) == 0 {
@@ -369,7 +379,11 @@ func (s *Server) ICMPPing(
 	if err != nil {
 		return nil, err
 	}
-	defer dialContext.Close()
+	defer func() {
+		if err := dialContext.Close(); err != nil {
+			// Log error but don't fail the operation
+		}
+	}()
 
 	ICMPData := make([]byte, 8+echoOptionDataSize) // header + data
 	ICMPData[0] = 8                                // echo
