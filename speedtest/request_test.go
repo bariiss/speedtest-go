@@ -27,7 +27,7 @@ func TestDownloadTestContext(t *testing.T) {
 		mockRequest,
 	)
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Errorf("error in downloadTestContext: %v", err)
 	}
 	value := server.Context.Manager.GetAvgDownloadRate()
 	if value < idealSpeed*(1-delta) || idealSpeed*(1+delta) < value {
@@ -58,7 +58,7 @@ func TestUploadTestContext(t *testing.T) {
 		mockRequest,
 	)
 	if err != nil {
-		t.Errorf(err.Error())
+		t.Errorf("error in uploadTestContext: %v", err)
 	}
 	value := server.Context.Manager.GetAvgUploadRate()
 	if value < idealSpeed*(1-delta) || idealSpeed*(1+delta) < value {

@@ -53,7 +53,7 @@ func TestUserAgent(t *testing.T) {
 		s := testServer(DefaultUserAgent)
 		_, err := c.doer.Get(s.URL)
 		if err != nil {
-			t.Errorf(err.Error())
+			t.Errorf("error with default user agent: %v", err)
 		}
 	})
 
@@ -63,7 +63,7 @@ func TestUserAgent(t *testing.T) {
 		c := New(WithUserConfig(&UserConfig{UserAgent: testAgent}))
 		_, err := c.doer.Get(s.URL)
 		if err != nil {
-			t.Errorf(err.Error())
+			t.Errorf("error with custom user agent: %v", err)
 		}
 	})
 
@@ -78,7 +78,7 @@ func TestUserAgent(t *testing.T) {
 		}
 		_, err := c.doer.Get(s.URL)
 		if err != nil {
-			t.Errorf(err.Error())
+			t.Errorf("error with custom user agent and doer: %v", err)
 		}
 	})
 }
