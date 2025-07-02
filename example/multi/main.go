@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/showwin/speedtest-go/speedtest"
+	"github.com/bariiss/speedtest-go/speedtest"
 	"log"
 )
 

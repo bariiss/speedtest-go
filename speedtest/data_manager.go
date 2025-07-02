@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"github.com/showwin/speedtest-go/speedtest/internal"
+	"github.com/bariiss/speedtest-go/speedtest/internal"
 	"io"
 	"math"
 	"runtime"

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/showwin/speedtest-go/speedtest"
-	"github.com/showwin/speedtest-go/speedtest/transport"
+	"github.com/bariiss/speedtest-go/speedtest"
+	"github.com/bariiss/speedtest-go/speedtest/transport"
 	"log"
 	"sync"
 	"time"

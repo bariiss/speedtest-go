@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/showwin/speedtest-go/speedtest/transport"
-	"gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin/v2"
+	"github.com/bariiss/speedtest-go/speedtest/transport"
 	"io"
 	"log"
 	"os"
@@ -15,7 +15,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/showwin/speedtest-go/speedtest"
+	"github.com/bariiss/speedtest-go/speedtest"
 )
 
 var (

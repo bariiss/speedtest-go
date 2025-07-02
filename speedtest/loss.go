@@ -2,7 +2,7 @@ package speedtest
 
 import (
 	"context"
-	"github.com/showwin/speedtest-go/speedtest/transport"
+	"github.com/bariiss/speedtest-go/speedtest/transport"
 	"net"
 	"sync"
 	"time"
